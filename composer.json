@@ -1,0 +1,30 @@
+{
+    "name": "joselfonseca/modelando-con-sentido",
+    "description": "Ejemplo de modelado de una regla de negocio en php",
+    "type": "project",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "jose fonseca",
+            "email": "jose@ditecnologia.com"
+        }
+    ],
+    "autoload": {
+      "psr-4": {
+        "Joselfonseca\\Mcs\\": "src/"
+      }
+    },
+    "autoload-dev": {
+      "psr-4": {
+        "Joselfonseca\\Mcs\\Tests\\": "tests/"
+      }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "require": {
+        "joselfonseca/fonck-toolbox": "^1.0@dev"
+    },
+    "require-dev": {
+      "phpunit/phpunit": "4.8.*"
+    }
+}
