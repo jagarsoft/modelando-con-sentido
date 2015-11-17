@@ -3,11 +3,45 @@
 namespace Joselfonseca\Mcs\CalculateShirtPrice\Middleware;
 
 use League\Tactician\Middleware;
+use Joselfonseca\Mcs\CalculateShirtPrice\Repositories\FabricRepositoryInterface;
 
+/**
+ * Class CalculateFabricPrice
+ * @package Joselfonseca\Mcs\CalculateShirtPrice\Middleware
+ */
 class CalculateFabricPrice implements Middleware{
 
 
-    protected $fabricVendorPrice = 2500;
+    /**
+     * Precio de la tela del fabricante
+     * @var
+     */
+    protected $fabricVendorPrice;
+    /**
+     * Contenedor de dependencias
+     * @var
+     */
+    protected $container;
+
+
+    /**
+     * CalculateFabricPrice constructor.
+     * @param $container
+     */
+    public function __construct($container)
+    {
+        $this->container = $container;
+    }
+
+    /**
+     * Obtener el precio de la tela por fabrica usando el repositorio
+     * @param $command
+     */
+    protected function getFabricVendorPrice($command)
+    {
+        $repository = $this->container->get(FabricRepositoryInterface::class);
+        $this->fabricVendorPrice = $repository->getFabricPrice($command->fabricSku);
+    }
 
 
     /**
@@ -18,6 +52,7 @@ class CalculateFabricPrice implements Middleware{
      */
     public function execute($command, callable $next)
     {
+        $this->getFabricVendorPrice($command);
         $command->fabricPrice = $this->fabricVendorPrice * $command->mts;
         return $next($command);
     }
