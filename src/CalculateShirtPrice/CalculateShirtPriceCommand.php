@@ -35,19 +35,27 @@ class CalculateShirtPriceCommand {
     public $buttonsSku;
 
     /**
+     * SKU de la camisa
+     * @var null
+     */
+    public $shirtSku;
+
+    /**
      * @param int $mts
      */
     public function __construct(
         $mts = 0,
         $fabricSku = null,
         $buttons = 8,
-        $buttonSku = null
+        $buttonSku = null,
+        $shirtSku = null
     )
     {
         $this->mts = $mts;
         $this->fabricSku = $fabricSku;
         $this->buttons = $buttons;
         $this->buttonSku = $buttonSku;
+        $this->shirtSku = $shirtSku;
     }
 
 }

@@ -7,6 +7,8 @@ use Joselfonseca\Mcs\CalculateShirtPrice\Repositories\FabricArrayRepository;
 use Joselfonseca\Mcs\CalculateShirtPrice\Repositories\ButtonsArrayRepository;
 use Joselfonseca\Mcs\CalculateShirtPrice\Repositories\FabricRepositoryInterface;
 use Joselfonseca\Mcs\CalculateShirtPrice\Repositories\ButtonsRepositoryInterface;
+use Joselfonseca\Mcs\CalculateShirtPrice\Repositories\ManufactureRepositoryInterface;
+use Joselfonseca\Mcs\CalculateShirtPrice\Repositories\ManufactureCostArrayRepository;
 
 /**
  * Class TestCase
@@ -28,6 +30,7 @@ class TestCase extends \PHPUnit_Framework_TestCase
         $this->services = new ServicesFactory();
         $this->services->container->add(FabricRepositoryInterface::class, FabricArrayRepository::class);
         $this->services->container->add(ButtonsRepositoryInterface::class, ButtonsArrayRepository::class);
+        $this->services->container->add(ManufactureRepositoryInterface::class, ManufactureCostArrayRepository::class);
         parent::setUp();
     }
 
