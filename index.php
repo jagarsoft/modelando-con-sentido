@@ -1,2 +1,2 @@
 <?php
-echo "Hola desde forge.";
+echo "Hola desde forge. Nuevo";
