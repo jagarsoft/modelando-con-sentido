@@ -4,6 +4,10 @@ namespace Joselfonseca\Mcs\Tests\CalculateShirtPrice;
 
 
 use Joselfonseca\Mcs\Tests\TestCase;
+use Joselfonseca\Mcs\CalculateShirtPrice\CalculateShirtPriceCommand;
+use Joselfonseca\Mcs\CalculateShirtPrice\Middleware\AddManuFactureCost;
+use Joselfonseca\Mcs\CalculateShirtPrice\Middleware\CalculateFabricPrice;
+use Joselfonseca\Mcs\CalculateShirtPrice\Middleware\CalculateButtonsPrice;
 use Joselfonseca\Mcs\CalculateShirtPrice\Repositories\FabricArrayRepository;
 use Joselfonseca\Mcs\CalculateShirtPrice\Repositories\ButtonsArrayRepository;
 use Joselfonseca\Mcs\CalculateShirtPrice\Repositories\ManufactureCostArrayRepository;
@@ -16,11 +20,11 @@ class CalculateShirtPriceTest extends TestCase
      */
     public function it_calculates_fabric_price()
     {
-        $command = $this->services->bus->dispatch(\Joselfonseca\Mcs\CalculateShirtPrice\CalculateShirtPriceCommand::class, [
+        $command = $this->services->bus->dispatch(CalculateShirtPriceCommand::class, [
             'mts' => 1.5,
             'fabricSku' => 'RET490'
         ], [
-            \Joselfonseca\Mcs\CalculateShirtPrice\Middleware\CalculateFabricPrice::class
+            CalculateFabricPrice::class
         ]);
         $this->assertEquals(3750, $command->fabricPrice);
     }
@@ -40,14 +44,14 @@ class CalculateShirtPriceTest extends TestCase
      */
     public function it_calculates_shirt_buttons_price()
     {
-        $command = $this->services->bus->dispatch(\Joselfonseca\Mcs\CalculateShirtPrice\CalculateShirtPriceCommand::class, [
+        $command = $this->services->bus->dispatch(CalculateShirtPriceCommand::class, [
             'mts' => 1.5,
             'fabricSku' => 'RET490',
             'buttons' => 10,
             'buttonSku' => 'BUT78'
         ], [
-            \Joselfonseca\Mcs\CalculateShirtPrice\Middleware\CalculateFabricPrice::class,
-            \Joselfonseca\Mcs\CalculateShirtPrice\Middleware\CalculateButtonsPrice::class
+            CalculateFabricPrice::class,
+            CalculateButtonsPrice::class
         ]);
         $this->assertEquals(1000, $command->buttonsPrice);
     }
@@ -67,16 +71,16 @@ class CalculateShirtPriceTest extends TestCase
      */
     public function it_adds_manufacture_costs_to_the_shirt()
     {
-        $command = $this->services->bus->dispatch(\Joselfonseca\Mcs\CalculateShirtPrice\CalculateShirtPriceCommand::class, [
+        $command = $this->services->bus->dispatch(CalculateShirtPriceCommand::class, [
             'mts' => 1.5,
             'fabricSku' => 'RET490',
             'buttons' => 10,
             'buttonSku' => 'BUT78',
             'shirtSku' => 'COP567'
         ], [
-            \Joselfonseca\Mcs\CalculateShirtPrice\Middleware\CalculateFabricPrice::class,
-            \Joselfonseca\Mcs\CalculateShirtPrice\Middleware\CalculateButtonsPrice::class,
-            \Joselfonseca\Mcs\CalculateShirtPrice\Middleware\AddManuFactureCost::class
+            CalculateFabricPrice::class,
+            CalculateButtonsPrice::class,
+            AddManuFactureCost::class
         ]);
         $this->assertEquals(2500, $command->manufactureCost);
     }
@@ -86,16 +90,16 @@ class CalculateShirtPriceTest extends TestCase
      */
     public function it_adds_cut_costs_to_the_shirt()
     {
-        $command = $this->services->bus->dispatch(\Joselfonseca\Mcs\CalculateShirtPrice\CalculateShirtPriceCommand::class, [
+        $command = $this->services->bus->dispatch(CalculateShirtPriceCommand::class, [
             'mts' => 1.5,
             'fabricSku' => 'RET490',
             'buttons' => 10,
             'buttonSku' => 'BUT78',
             'shirtSku' => 'COP567'
         ], [
-            \Joselfonseca\Mcs\CalculateShirtPrice\Middleware\CalculateFabricPrice::class,
-            \Joselfonseca\Mcs\CalculateShirtPrice\Middleware\CalculateButtonsPrice::class,
-            \Joselfonseca\Mcs\CalculateShirtPrice\Middleware\AddManuFactureCost::class
+            CalculateFabricPrice::class,
+            CalculateButtonsPrice::class,
+            AddManuFactureCost::class
         ]);
         $this->assertEquals(500, $command->cutCost);
     }

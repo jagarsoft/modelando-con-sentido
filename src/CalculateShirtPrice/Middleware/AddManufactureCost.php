@@ -25,7 +25,7 @@ class AddManufactureCost implements Middleware
         $this->getManufactureCost($command)->getCutCost($command);
         $command->manufactureCost = $this->manufactureCost;
         $command->cutCost = $this->cutCost;
-        return $command;
+        return $next($command);
     }
 
     protected function getManufactureCost($command)
