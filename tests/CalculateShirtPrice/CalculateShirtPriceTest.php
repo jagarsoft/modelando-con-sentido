@@ -4,10 +4,6 @@ namespace Joselfonseca\Mcs\Tests\CalculateShirtPrice;
 
 
 use Joselfonseca\Mcs\Tests\TestCase;
-use Joselfonseca\Mcs\CalculateShirtPrice\CalculateShirtPriceCommand;
-use Joselfonseca\Mcs\CalculateShirtPrice\Middleware\AddManuFactureCost;
-use Joselfonseca\Mcs\CalculateShirtPrice\Middleware\CalculateFabricPrice;
-use Joselfonseca\Mcs\CalculateShirtPrice\Middleware\CalculateButtonsPrice;
 use Joselfonseca\Mcs\CalculateShirtPrice\Repositories\FabricArrayRepository;
 use Joselfonseca\Mcs\CalculateShirtPrice\Repositories\ButtonsArrayRepository;
 use Joselfonseca\Mcs\CalculateShirtPrice\Repositories\ManufactureCostArrayRepository;
@@ -20,12 +16,7 @@ class CalculateShirtPriceTest extends TestCase
      */
     public function it_calculates_fabric_price()
     {
-        $command = $this->services->bus->dispatch(CalculateShirtPriceCommand::class, [
-            'mts' => 1.5,
-            'fabricSku' => 'RET490'
-        ], [
-            CalculateFabricPrice::class
-        ]);
+        $command = $this->runCommand();
         $this->assertEquals(3750, $command->fabricPrice);
     }
 
@@ -44,15 +35,7 @@ class CalculateShirtPriceTest extends TestCase
      */
     public function it_calculates_shirt_buttons_price()
     {
-        $command = $this->services->bus->dispatch(CalculateShirtPriceCommand::class, [
-            'mts' => 1.5,
-            'fabricSku' => 'RET490',
-            'buttons' => 10,
-            'buttonSku' => 'BUT78'
-        ], [
-            CalculateFabricPrice::class,
-            CalculateButtonsPrice::class
-        ]);
+        $command = $this->runCommand();
         $this->assertEquals(1000, $command->buttonsPrice);
     }
 
@@ -71,17 +54,7 @@ class CalculateShirtPriceTest extends TestCase
      */
     public function it_adds_manufacture_costs_to_the_shirt()
     {
-        $command = $this->services->bus->dispatch(CalculateShirtPriceCommand::class, [
-            'mts' => 1.5,
-            'fabricSku' => 'RET490',
-            'buttons' => 10,
-            'buttonSku' => 'BUT78',
-            'shirtSku' => 'COP567'
-        ], [
-            CalculateFabricPrice::class,
-            CalculateButtonsPrice::class,
-            AddManuFactureCost::class
-        ]);
+        $command = $this->runCommand();
         $this->assertEquals(2500, $command->manufactureCost);
     }
 
@@ -90,17 +63,7 @@ class CalculateShirtPriceTest extends TestCase
      */
     public function it_adds_cut_costs_to_the_shirt()
     {
-        $command = $this->services->bus->dispatch(CalculateShirtPriceCommand::class, [
-            'mts' => 1.5,
-            'fabricSku' => 'RET490',
-            'buttons' => 10,
-            'buttonSku' => 'BUT78',
-            'shirtSku' => 'COP567'
-        ], [
-            CalculateFabricPrice::class,
-            CalculateButtonsPrice::class,
-            AddManuFactureCost::class
-        ]);
+        $command = $this->runCommand();
         $this->assertEquals(500, $command->cutCost);
     }
 
@@ -122,6 +85,60 @@ class CalculateShirtPriceTest extends TestCase
     {
         $repository = new ManufactureCostArrayRepository();
         $repository->getManufactureCost('TYHYYT67');
+    }
+
+    /**
+     * @test
+     */
+    public function it_calculates_embroidery_price()
+    {
+        $command = $this->runCommand();
+        $this->assertEquals(3000, $command->embroidery['price']);
+    }
+
+    /**
+     * @test
+     */
+    public function it_sets_total_costs_for_shirt()
+    {
+        $command = $this->runCommand();
+        $this->assertEquals(10750, $command->totalCosts);
+    }
+
+    /**
+     * @test
+     */
+    public function it_calculates_administrative_costs_for_shirt()
+    {
+        $command = $this->runCommand();
+        $this->assertEquals(1075, $command->administrativeCost);
+    }
+
+    /**
+     * @test
+     */
+    public function it_calculates_utility_for_shirt()
+    {
+        $command = $this->runCommand();
+        $this->assertEquals(8278, $command->utility);
+    }
+
+    /**
+     * @test
+     */
+    public function it_calculates_tax_for_shirt()
+    {
+        $command = $this->runCommand();
+        $this->assertEquals(3217, $command->tax);
+    }
+
+    /**
+     * @test
+     */
+    public function it_calculates_sale_price()
+    {
+        $command = $this->runCommand();
+        $this->assertEquals(23320, $command->salePrice);
     }
 
 }

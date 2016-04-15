@@ -6,7 +6,7 @@ use League\Container\Container;
 use League\Tactician\Middleware;
 use Joselfonseca\Mcs\CalculateShirtPrice\Repositories\ManufactureRepositoryInterface;
 
-class AddManufactureCost implements Middleware
+class AddManFractureCost implements Middleware
 {
 
     protected $manufactureCost = 2500;

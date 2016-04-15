@@ -2,9 +2,8 @@
 
 namespace Joselfonseca\Mcs\CalculateShirtPrice;
 
-
 /**
- * Class CalculatePriceShirtCommand
+ * Class CalculateShirtPriceCommand
  * @package Joselfonseca\Mcs\CalculateShirtPrice
  */
 class CalculateShirtPriceCommand {
@@ -32,7 +31,7 @@ class CalculateShirtPriceCommand {
      * SKU de los botones a usar
      * @var null
      */
-    public $buttonsSku;
+    public $buttonSku;
 
     /**
      * SKU de la camisa
@@ -41,21 +40,49 @@ class CalculateShirtPriceCommand {
     public $shirtSku;
 
     /**
-     * @param int $mts
+     * @var
      */
-    public function __construct(
-        $mts = 0,
-        $fabricSku = null,
-        $buttons = 8,
-        $buttonSku = null,
-        $shirtSku = null
-    )
+    public $embroidery;
+
+    /**
+     * @var
+     */
+    public $administrativePercent;
+
+    /**
+     * @var
+     */
+    public $utilityPercent;
+
+    /**
+     * @var
+     */
+    public $taxPercent;
+
+
+    /**
+     * CalculateShirtPriceCommand constructor.
+     * @param int $mts
+     * @param null $fabricSku
+     * @param int $buttons
+     * @param null $buttonSku
+     * @param null $shirtSku
+     * @param null $embroidery
+     * @param int $administrativePercent
+     * @param int $utilityPercent
+     * @param int $taxPercent
+     */
+    public function __construct($mts = 0, $fabricSku = null, $buttons = 8, $buttonSku = null, $shirtSku = null, $embroidery = null, $administrativePercent = 10, $utilityPercent = 50, $taxPercent = 16)
     {
         $this->mts = $mts;
         $this->fabricSku = $fabricSku;
         $this->buttons = $buttons;
         $this->buttonSku = $buttonSku;
         $this->shirtSku = $shirtSku;
+        $this->embroidery = $embroidery;
+        $this->administrativePercent = $administrativePercent;
+        $this->utilityPercent = $utilityPercent;
+        $this->taxPercent = $taxPercent;
     }
 
 }
